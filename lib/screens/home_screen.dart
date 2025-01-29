@@ -1,12 +1,14 @@
 import 'package:AnimeTalk/core/service_locator.dart';
 import 'package:AnimeTalk/data/repositories/character_repository.dart';
 import 'package:AnimeTalk/models/character_model.dart';
+import 'package:AnimeTalk/widgets/unboarding.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../services/character_service.dart';
 import '../widgets/character_card.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -21,6 +23,32 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _characterService = getIt<CharacterService>();
     characterRepository = getIt<CharacterRepository>();
+    _checkFirstTimeUser();
+  }
+
+  Future<bool> isFirstTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isFirstTime') ?? true;
+  }
+
+  Future<void> _checkFirstTimeUser() async {
+    if (await isFirstTime()) {
+      // Using WidgetsBinding to ensure the dialog shows after the build
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => UserOnboardingDialog(
+            onSubmit: (userDetails) async {
+              // Save user details to your preferred storage
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setBool('isFirstTime', false);
+              // Add code to save user details to your database
+            },
+          ),
+        );
+      });
+    }
   }
 
   Stream<bool> watchCharIsFav(String name) {
