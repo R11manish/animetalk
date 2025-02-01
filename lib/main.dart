@@ -1,5 +1,6 @@
 import 'package:AnimeTalk/screens/fav_screen.dart';
 import 'package:AnimeTalk/screens/messages_screen.dart';
+// import 'package:AnimeTalk/widgets/feature/first_time_user_check.dart';
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
 import 'widgets/bottom_nav_bar.dart';
@@ -34,7 +35,16 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  // final FirstTimeUserCheck _firstTimeCheck = FirstTimeUserCheck();
+
   int _currentIndex = 0;
+
+
+  @override
+  void initState() {
+    super.initState();
+    // _firstTimeCheck.checkFirstTimeUser(context);
+  }
 
   final List<Widget> _screens = [
     const HomeScreen(),

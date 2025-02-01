@@ -78,8 +78,8 @@ class _MessagesScreen extends State<MessagesScreen> {
             ),
           ),
           Expanded(
-            child: StreamBuilder<List<Character>>(
-              stream: characterRepository.watchAllCharacters(),
+            child: FutureBuilder<List<Character>>(
+              future: characterRepository.getAllCharacters(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());

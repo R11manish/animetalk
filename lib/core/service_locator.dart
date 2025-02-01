@@ -11,7 +11,6 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<AppDatabase>(() => AppDatabase());
 
   getIt.registerLazySingleton<ApiClient>(() => ApiClient(
-        baseUrl: 'https://api.example.com',
         useMockData: true,
       ));
 

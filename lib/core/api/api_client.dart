@@ -4,11 +4,11 @@ import 'package:http/http.dart' as http;
 import "package:AnimeTalk/services/mock_data.dart";
 
 class ApiClient {
-  final String baseUrl;
+  final String baseUrl =
+      "https://alf9kf9ukl.execute-api.ap-south-1.amazonaws.com/";
   final bool useMockData;
 
   ApiClient({
-    required this.baseUrl,
     this.useMockData = false,
   });
 

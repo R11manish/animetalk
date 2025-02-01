@@ -73,9 +73,8 @@ class FavScreen extends StatelessWidget {
 
                   final currentCharacter = ICharacter(
                     name: character.name,
-                    nameChecking: true,
                     description: character.description,
-                    imageUrl: character.profileUrl,
+                    profileUrl: character.profileUrl,
                   );
 
                   return CharacterCard(

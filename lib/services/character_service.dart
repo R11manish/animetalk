@@ -14,9 +14,8 @@ class CharacterService {
           .take(5)
           .map((apiChar) => ICharacter(
                 name: apiChar.name,
-                nameChecking: apiChar.nameChecking,
                 description: apiChar.description,
-                imageUrl: apiChar.imageUrl,
+                profileUrl: apiChar.profileUrl,
               ))
           .toList();
     } catch (e) {
@@ -30,9 +29,8 @@ class CharacterService {
       return characters
           .map((apiChar) => ICharacter(
                 name: apiChar.name,
-                nameChecking: apiChar.nameChecking,
                 description: apiChar.description,
-                imageUrl: apiChar.imageUrl,
+                profileUrl: apiChar.profileUrl,
               ))
           .toList();
     } catch (e) {

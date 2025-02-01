@@ -21,31 +21,8 @@ class CharacterCard extends StatelessWidget {
     this.onFavoritePressed,
   });
 
-
-  // Future<void> _toggleFavCharcter() async {
-  //   final existingCharacter =
-  //       await characterRepository.getCharacterByName(character.name);
-
-  //   if (existingCharacter != null) {
-  //     await characterRepository.updateCharacter(
-  //       id: existingCharacter.id,
-  //       name: existingCharacter.name,
-  //       description: existingCharacter.description,
-  //       profileUrl: existingCharacter.profileUrl,
-  //       favourite: !existingCharacter.favourite,
-  //     );
-  //   } else {
-  //     await characterRepository.createCharacter(
-  //         name: character.name,
-  //         description: character.description,
-  //         profileUrl: character.imageUrl,
-  //         favourite: true);
-  //   }
-  // }
-
   Future<void> _navigateToChatScreen(BuildContext context) async {
     final currentContext = context;
-    // await _checkAndInsertCharacter();
     if (!currentContext.mounted) return;
 
     Navigator.push(
@@ -54,7 +31,7 @@ class CharacterCard extends StatelessWidget {
         builder: (context) => ChatScreen(
           characterName: character.name,
           characterRole: character.description,
-          characterImage: character.imageUrl,
+          characterImage: character.profileUrl,
         ),
       ),
     );
@@ -88,7 +65,7 @@ class CharacterCard extends StatelessWidget {
                   AspectRatio(
                     aspectRatio: 4 / 3,
                     child: CachedNetworkImage(
-                      imageUrl: character.imageUrl,
+                      imageUrl: character.profileUrl,
                       fit: BoxFit.cover,
                       placeholder: (context, url) => Container(
                         color: Colors.grey[200],

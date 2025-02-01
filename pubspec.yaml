@@ -19,6 +19,9 @@ dependencies:
   provider: ^6.0.0
   intl: ^0.18.0
   shared_preferences: ^2.2.0
+  flutter_secure_storage: ^9.0.0
+  jailbreak_root_detection: ^1.1.5
+  dio: ^5.8.0+1
 
 dev_dependencies:
   flutter_test:
@@ -26,6 +29,7 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   drift_dev: ^2.8.0
   build_runner: ^2.4.6
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
@@ -38,3 +42,8 @@ flutter:
         - asset: assets/fonts/Roboto-Regular.ttf
         - asset: assets/fonts/Roboto-Bold.ttf
           weight: 700
+
+flutter_icons:
+  image_path: "assets/images/logo.png"
+  android: true
+  ios: true
