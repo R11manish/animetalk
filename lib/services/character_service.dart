@@ -9,7 +9,6 @@ class CharacterService {
   Future<List<ICharacter>> getFeaturedCharacters() async {
     try {
       final characters = await _apiClient.getCharacters();
-      // For this example, we'll consider the first 5 characters as featured
       return characters
           .take(5)
           .map((apiChar) => ICharacter(

@@ -66,11 +66,11 @@ class _OtpVerificationDialogState extends State<OtpVerificationDialog> {
     return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 
+
   void _onOtpSubmit() {
     String otp = _controllers.map((c) => c.text).join();
-    if (otp.length == 5) {
+    if (otp.length == 6) {
       widget.onVerify(otp);
-      Navigator.of(context).pop();
     }
   }
 

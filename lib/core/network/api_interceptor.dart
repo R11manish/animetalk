@@ -4,13 +4,10 @@ import 'api_endpoints.dart';
 class ApiInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    final noAuthEndpoints = [
-      ApiEndpoints.sendOtp,
-      ApiEndpoints.verifyOtp,
-    ];
+    final noAuthEndpoints = [ApiEndpoints.chat];
 
     // Add Authorization header only if required
-    if (!noAuthEndpoints.contains(options.path)) {
+    if (noAuthEndpoints.contains(options.path)) {
       options.headers['Authorization'] = 'Bearer YOUR_ACCESS_TOKEN';
     }
 
