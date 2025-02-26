@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:intl/intl.dart';
 
 class UserDetails {
@@ -18,8 +19,18 @@ class UserDetails {
       'name': name,
       'email': email,
       'gender': gender,
-      'dob': DateFormat('yyyy-MM-dd').format(dob!),
+      'dob': dob != null ? DateFormat('yyyy-MM-dd').format(dob!) : null,
     };
+  }
+
+  factory UserDetails.fromString(String str) {
+    final Map<String, dynamic> json = jsonDecode(str);
+    return UserDetails.fromJson(json);
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(toJson());
   }
 
   factory UserDetails.fromJson(Map<String, dynamic> json) {
@@ -29,5 +40,29 @@ class UserDetails {
       gender: json['gender'] as String,
       dob: json['dob'] != null ? DateTime.parse(json['dob'] as String) : null,
     );
+  }
+}
+
+class AuthModel {
+  final String? email;
+  final String? otp;
+
+  AuthModel({
+    this.email,
+    this.otp,
+  });
+
+  factory AuthModel.fromJson(Map<String, dynamic> json) {
+    return AuthModel(
+      email: json['email'] as String?,
+      otp: json['otp'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'email': email,
+      'otp': otp,
+    };
   }
 }

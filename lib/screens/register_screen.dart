@@ -1,5 +1,3 @@
-import 'package:AnimeTalk/core/network/api_client.dart';
-import 'package:AnimeTalk/core/network/api_endpoints.dart';
 import 'package:AnimeTalk/repository/register.dart';
 import 'package:AnimeTalk/utility/functions.dart';
 import 'package:AnimeTalk/widgets/otp_verification.dart';
@@ -25,24 +23,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
     register = Register();
   }
 
-  void _handleUserDetails(UserDetails details) async {
-    await register.sendOtp(details);
+  void _handleUserDetails(UserDetails details) {
+    register.sendOtp(details);
     setState(() {
       _userDetails = details;
       _showOtpVerification = true;
     });
   }
 
-  void _handleOtpVerification(String otp) {
-    // Here you would verify the OTP with your backend
-    print('OTP Verified: $otp');
-    SetFirstTime(false);
+  void _handleOtpVerification(String otp) async {
+    await register.validateOtp(otp, _userDetails?.email);
+    await SetFirstTime(false);
     Navigator.pushReplacementNamed(context, '/main');
   }
 
-  void _handleResendOtp() {
-    print('Resending OTP...');
-  }
+  void _handleResendOtp() {}
 
   @override
   Widget build(BuildContext context) {

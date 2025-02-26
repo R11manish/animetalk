@@ -1,7 +1,6 @@
 import 'package:AnimeTalk/constants/app_logo.dart';
 import 'package:AnimeTalk/models/user_details.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class UserOnboardingDialog extends StatefulWidget {
   final Function(UserDetails) onSubmit;

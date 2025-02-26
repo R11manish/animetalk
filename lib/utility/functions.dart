@@ -1,3 +1,5 @@
+import 'package:AnimeTalk/data/database/database.dart';
+import 'package:AnimeTalk/models/llm_message.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String isFirstTimeKey = 'isFirstTime';
@@ -11,4 +13,10 @@ Future<bool> IsFirstTime() async {
 Future<void> SetFirstTime(bool value) async {
   final prefs = await SharedPreferences.getInstance();
   prefs.setBool(isFirstTimeKey, value);
+}
+
+List<LLMessage> convertToLLMessages(List<Message> messages) {
+  return messages
+      .map((msg) => LLMessage(role: msg.role, content: msg.message))
+      .toList();
 }

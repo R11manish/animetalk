@@ -2,7 +2,7 @@ import 'package:AnimeTalk/core/api/api_client.dart';
 import 'package:AnimeTalk/data/database/database.dart';
 import 'package:AnimeTalk/data/repositories/character_repository.dart';
 import 'package:AnimeTalk/data/repositories/message_repository.dart';
-import 'package:AnimeTalk/services/character_service.dart';
+import 'package:AnimeTalk/services/token_service.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
@@ -14,9 +14,7 @@ void setupServiceLocator() {
         useMockData: true,
       ));
 
-  getIt.registerLazySingleton<CharacterService>(
-    () => CharacterService(apiClient: getIt<ApiClient>()),
-  );
+  getIt.registerLazySingleton<TokenService>(() => TokenService());
 
   getIt.registerLazySingleton<CharacterRepository>(
     () => CharacterRepository(getIt<AppDatabase>()),

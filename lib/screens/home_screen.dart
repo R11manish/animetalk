@@ -2,8 +2,8 @@ import 'package:AnimeTalk/core/service_locator.dart';
 import 'package:AnimeTalk/data/repositories/character_repository.dart';
 import 'package:AnimeTalk/models/character_model.dart';
 import 'package:flutter/material.dart';
-import '../services/character_service.dart';
 import '../widgets/character_card.dart';
+import '../repository/characters.dart' as char;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,15 +13,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late final CharacterService _characterService;
+  late final char.Characters characterService;
   late final CharacterRepository characterRepository;
 
   @override
   void initState() {
     super.initState();
-    _characterService = getIt<CharacterService>();
+    characterService = char.Characters();
     characterRepository = getIt<CharacterRepository>();
-
   }
 
   Stream<bool> watchCharIsFav(String name) {
@@ -90,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(
                   height: 220,
                   child: FutureBuilder<List<ICharacter>>(
-                    future: _characterService.getFeaturedCharacters(),
+                    future: characterService.getFeaturedCharacters(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
@@ -131,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 FutureBuilder<List<ICharacter>>(
-                  future: _characterService.getAllCharacters(),
+                  future: characterService.getAllCharacters(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());

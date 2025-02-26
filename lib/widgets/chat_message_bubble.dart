@@ -1,67 +1,83 @@
 import 'package:AnimeTalk/data/database/database.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Add this import
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:intl/intl.dart';
 
 class ChatMessageBubble extends StatelessWidget {
   final Message message;
   final String characterImage;
 
   const ChatMessageBubble({
-    Key? key,
+    super.key,
     required this.message,
     required this.characterImage,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final maxWidth = MediaQuery.of(context).size.width * 0.75;
-
-    // Format the DateTime to a string
     final formattedTime = DateFormat('HH:mm').format(message.createdAt);
+    final isUserMessage = message.role == 'user';
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: message.role == 'user'
-            ? MainAxisAlignment.end
-            : MainAxisAlignment.start,
+        mainAxisAlignment:
+            isUserMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
-          if (message.role != 'user') ...[
+          if (!isUserMessage) ...[
             CircleAvatar(
-              backgroundImage: AssetImage(characterImage),
+              backgroundImage: CachedNetworkImageProvider(characterImage),
               radius: 16,
             ),
             const SizedBox(width: 8),
           ],
           ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: maxWidth,
-            ),
+            constraints: BoxConstraints(maxWidth: maxWidth),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: message.role == 'user' ? Colors.black : Colors.grey[200],
+                color: isUserMessage ? Colors.black : Colors.grey[200],
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    message.message,
-                    style: TextStyle(
-                      color:
-                          message.role == 'user' ? Colors.white : Colors.black,
-                      fontSize: 16,
+                  MarkdownBody(
+                    data: message.message,
+                    styleSheet: MarkdownStyleSheet(
+                      p: TextStyle(
+                        color: isUserMessage ? Colors.white : Colors.black,
+                        fontSize: 16,
+                      ),
+                      code: TextStyle(
+                        backgroundColor:
+                            isUserMessage ? Colors.white : Colors.black,
+                        color: isUserMessage ? Colors.white : Colors.black,
+                        fontSize: 14,
+                      ),
+                      a: TextStyle(
+                        color:
+                            isUserMessage ? Colors.lightBlue[200] : Colors.blue,
+                      ),
+                      strong: TextStyle(
+                        color: isUserMessage ? Colors.white : Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      em: TextStyle(
+                        color: isUserMessage ? Colors.white : Colors.black,
+                        fontStyle: FontStyle.italic,
+                      ),
                     ),
+                    selectable: true,
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    formattedTime, // Use the formatted time string
+                    formattedTime,
                     style: TextStyle(
-                      color: message.role == 'user'
-                          ? Colors.white.withOpacity(0.7)
-                          : Colors.grey[600],
+                      color: isUserMessage ? Colors.white70 : Colors.grey[600],
                       fontSize: 12,
                     ),
                   ),
@@ -69,7 +85,7 @@ class ChatMessageBubble extends StatelessWidget {
               ),
             ),
           ),
-          if (message.role == 'user') const SizedBox(width: 24),
+          if (isUserMessage) const SizedBox(width: 24),
         ],
       ),
     );

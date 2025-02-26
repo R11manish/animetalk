@@ -142,7 +142,7 @@ class _MessagesScreen extends State<MessagesScreen> {
                               MaterialPageRoute(
                                 builder: (context) => ChatScreen(
                                   characterName: character.name,
-                                  characterRole: character.description,
+                                  characterDesc: character.description,
                                   characterImage: character.profileUrl,
                                 ),
                               ),

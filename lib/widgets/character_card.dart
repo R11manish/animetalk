@@ -30,7 +30,7 @@ class CharacterCard extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => ChatScreen(
           characterName: character.name,
-          characterRole: character.description,
+          characterDesc: character.description,
           characterImage: character.profileUrl,
         ),
       ),

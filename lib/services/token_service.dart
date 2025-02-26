@@ -2,31 +2,30 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class TokenService {
   final storage = const FlutterSecureStorage();
-  static const String _tokenKey = 'api_token';
 
-  Future<void> saveToken(String token) async {
+  Future<void> saveToken(String key, String token) async {
     if (token.isEmpty) {
       throw ArgumentError('Token cannot be empty');
     }
 
     try {
-      await storage.write(key: _tokenKey, value: token);
+      await storage.write(key: key, value: token);
     } catch (e) {
       throw StorageException('Failed to save token: ${e.toString()}');
     }
   }
 
-  Future<String?> getToken() async {
+  Future<String?> getToken(String key) async {
     try {
-      return await storage.read(key: _tokenKey);
+      return await storage.read(key: key);
     } catch (e) {
       throw StorageException('Failed to retrieve token: ${e.toString()}');
     }
   }
 
-  Future<void> deleteToken() async {
+  Future<void> deleteToken(String key) async {
     try {
-      await storage.delete(key: _tokenKey);
+      await storage.delete(key: key);
     } catch (e) {
       throw StorageException('Failed to delete token: ${e.toString()}');
     }

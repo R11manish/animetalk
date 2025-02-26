@@ -3,6 +3,9 @@ import 'package:AnimeTalk/core/service_locator.dart';
 import 'package:AnimeTalk/data/database/database.dart';
 import 'package:AnimeTalk/data/repositories/character_repository.dart';
 import 'package:AnimeTalk/data/repositories/message_repository.dart';
+import 'package:AnimeTalk/models/llm_message.dart';
+import 'package:AnimeTalk/repository/chat.dart';
+import 'package:AnimeTalk/utility/functions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,13 +13,13 @@ import '../widgets/chat_message_bubble.dart';
 
 class ChatScreen extends StatefulWidget {
   final String characterName;
-  final String characterRole;
+  final String characterDesc;
   final String characterImage;
 
   const ChatScreen({
     super.key,
     required this.characterName,
-    required this.characterRole,
+    required this.characterDesc,
     required this.characterImage,
   });
 
@@ -28,15 +31,29 @@ class _ChatScreenState extends State<ChatScreen> {
   late final CharacterRepository characterRepository;
   late final MessageRepository messageRepository;
   final ScrollController _scrollController = ScrollController();
+  late final Chat chatService;
+  final TextEditingController _messageController = TextEditingController();
+  List<Message> currentMessages = []; // State to maintain messages
 
   @override
   void initState() {
     super.initState();
     messageRepository = getIt<MessageRepository>();
     characterRepository = getIt<CharacterRepository>();
+    chatService = Chat();
+    _initializeMessages();
   }
 
-  final TextEditingController _messageController = TextEditingController();
+  Future<void> _initializeMessages() async {
+    final characterId = await getCharacterId(widget.characterName);
+    if (characterId != null) {
+      final messages =
+          await messageRepository.getMessagesByCharacterId(characterId);
+      setState(() {
+        currentMessages = messages;
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -64,19 +81,40 @@ class _ChatScreenState extends State<ChatScreen> {
       if (character == null) {
         characterId = await characterRepository.createCharacter(
           name: widget.characterName,
-          description: widget.characterRole,
+          description: widget.characterDesc,
           profileUrl: widget.characterImage,
           favourite: false,
         );
 
         setState(() {});
-
         return characterId;
       }
 
       return character.id;
     } catch (e) {
       throw Exception('Failed to get or create character');
+    }
+  }
+
+  Future<void> _sendMessage() async {
+    if (_messageController.text.isNotEmpty) {
+      FocusScope.of(context).unfocus();
+      final characterId = await getOrCreateCharacterId();
+
+      final newMessage =
+          LLMessage(role: 'user', content: _messageController.text);
+
+      await saveMessage(
+        characterId,
+        _messageController.text,
+        Role.user,
+      );
+
+      final llMessages = convertToLLMessages(currentMessages);
+      _messageController.clear();
+
+      chatService.sendMessage(characterId, widget.characterName,
+          widget.characterDesc, [...llMessages, newMessage]);
     }
   }
 
@@ -150,7 +188,7 @@ class _ChatScreenState extends State<ChatScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             color: Colors.grey[200],
             child: Text(
-              widget.characterRole,
+              widget.characterDesc,
               style: TextStyle(
                 color: Colors.grey[600],
                 fontSize: 14,
@@ -190,6 +228,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     }
 
                     final messages = snapshot.data!;
+                    // Update currentMessages when stream provides new data
+                    currentMessages = messages;
 
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       if (_scrollController.hasClients) {
@@ -238,14 +278,14 @@ class _ChatScreenState extends State<ChatScreen> {
                 Expanded(
                   child: Container(
                     constraints: const BoxConstraints(
-                      maxHeight: 150, // Maximum height the input can expand to
+                      maxHeight: 150,
                     ),
                     child: TextField(
                       controller: _messageController,
                       maxLength: 120,
                       maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                      maxLines: null, // Allows for multiple lines
-                      minLines: 1, // Starts with a single line
+                      maxLines: null,
+                      minLines: 1,
                       textInputAction: TextInputAction.newline,
                       keyboardType: TextInputType.multiline,
                       decoration: InputDecoration(
@@ -273,18 +313,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: IconButton(
                     icon: const Icon(Icons.arrow_forward,
                         color: Colors.white, size: 20),
-                    onPressed: () async {
-                      if (_messageController.text.isNotEmpty) {
-                        FocusScope.of(context).unfocus();
-                        final characterId = await getOrCreateCharacterId();
-                        await saveMessage(
-                          characterId,
-                          _messageController.text,
-                          Role.user,
-                        );
-                        _messageController.clear();
-                      }
-                    },
+                    onPressed: _sendMessage,
                   ),
                 ),
               ],
