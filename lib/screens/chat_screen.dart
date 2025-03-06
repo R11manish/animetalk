@@ -9,7 +9,9 @@ import 'package:AnimeTalk/utility/functions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:math';
 import '../widgets/chat_message_bubble.dart';
+import '../widgets/typing_indicator.dart';
 
 class ChatScreen extends StatefulWidget {
   final String characterName;
@@ -34,6 +36,7 @@ class _ChatScreenState extends State<ChatScreen> {
   late final Chat chatService;
   final TextEditingController _messageController = TextEditingController();
   List<Message> currentMessages = []; // State to maintain messages
+  bool _isCharacterTyping = false; // Added to track typing state
 
   @override
   void initState() {
@@ -113,8 +116,20 @@ class _ChatScreenState extends State<ChatScreen> {
       final llMessages = convertToLLMessages(currentMessages);
       _messageController.clear();
 
-      chatService.sendMessage(characterId, widget.characterName,
-          widget.characterDesc, [...llMessages, newMessage]);
+      // Set typing indicator to true before sending message
+      setState(() {
+        _isCharacterTyping = true;
+      });
+
+      try {
+        await chatService.sendMessage(characterId, widget.characterName,
+            widget.characterDesc, [...llMessages, newMessage]);
+      } finally {
+        // Set typing indicator to false when done
+        setState(() {
+          _isCharacterTyping = false;
+        });
+      }
     }
   }
 
@@ -244,8 +259,13 @@ class _ChatScreenState extends State<ChatScreen> {
                     return ListView.builder(
                       controller: _scrollController,
                       padding: const EdgeInsets.all(16),
-                      itemCount: messages.length,
+                      itemCount: _isCharacterTyping ? messages.length + 1 : messages.length,
                       itemBuilder: (context, index) {
+                        if (_isCharacterTyping && index == messages.length) {
+                          return TypingIndicator(
+                            characterImage: widget.characterImage,
+                          );
+                        }
                         final message = messages[index];
                         return ChatMessageBubble(
                           message: message,
