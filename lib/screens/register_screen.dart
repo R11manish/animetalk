@@ -23,21 +23,56 @@ class _RegisterScreenState extends State<RegisterScreen> {
     register = Register();
   }
 
-  void _handleUserDetails(UserDetails details) {
-    register.sendOtp(details);
-    setState(() {
-      _userDetails = details;
-      _showOtpVerification = true;
-    });
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  void _handleUserDetails(UserDetails details) async {
+    try {
+      await register.sendOtp(details);
+      setState(() {
+        _userDetails = details;
+        _showOtpVerification = true;
+      });
+    } catch (e) {
+      _showErrorSnackBar(e.toString());
+    }
   }
 
   void _handleOtpVerification(String otp) async {
-    await register.validateOtp(otp, _userDetails?.email);
-    await SetFirstTime(false);
-    Navigator.pushReplacementNamed(context, '/main');
+    try {
+      await register.validateOtp(otp, _userDetails?.email);
+      await SetFirstTime(false);
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, '/main');
+    } catch (e) {
+      _showErrorSnackBar(e.toString());
+    }
   }
 
-  void _handleResendOtp() {}
+  void _handleResendOtp() async {
+    try {
+      if (_userDetails != null) {
+        await register.sendOtp(_userDetails!);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('OTP resent successfully'),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } catch (e) {
+      _showErrorSnackBar(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

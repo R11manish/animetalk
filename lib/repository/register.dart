@@ -15,8 +15,7 @@ class Register {
   }
 
   Future<void> sendOtp(UserDetails user) async {
-    print(user.toJson());
-    await _apiClient.post(ApiEndpoints.sendOtp,
+    _apiClient.post(ApiEndpoints.sendOtp,
         data: user.toJson(), requiresAuth: false);
     await tokenService.saveToken(USER_DETAILS, user.toString());
   }
@@ -26,6 +25,10 @@ class Register {
         data: {'otp': otp, 'email': email}, requiresAuth: false);
 
     final apiKey = response.data?['api_key'];
+
+    if (response.data?['status'] == "error") {
+      throw Exception(response.data?['message'] ?? 'An error occurred');
+    }
     if (apiKey == null) {
       throw StateError('API key not found in response');
     }
