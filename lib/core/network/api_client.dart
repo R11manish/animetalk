@@ -13,7 +13,7 @@ class ApiClient {
       baseUrl: ApiEndpoints.baseUrl,
       connectTimeout: const Duration(seconds: 360),
       receiveTimeout: const Duration(seconds: 360),
-      validateStatus: (status) => true, 
+      validateStatus: (status) => true,
     ));
 
     _dio.interceptors.add(ApiInterceptor());
@@ -23,9 +23,11 @@ class ApiClient {
   Future<Response> get(String path,
       {Map<String, dynamic>? queryParameters}) async {
     try {
+      print(queryParameters);
       final response = await _dio.get(path, queryParameters: queryParameters);
       return response;
     } on DioException catch (e) {
+      print(e);
       throw _handleError(e);
     }
   }

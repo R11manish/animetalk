@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:AnimeTalk/data/database/database.dart';
 import 'package:AnimeTalk/models/llm_message.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,4 +21,16 @@ List<LLMessage> convertToLLMessages(List<Message> messages) {
   return messages
       .map((msg) => LLMessage(role: msg.role, content: msg.message))
       .toList();
+}
+
+
+String encodeLastKey(String value) {
+  final Map<String, dynamic> lastKeyObject = {
+    'name': {'S': value}
+  };
+
+  String jsonString = jsonEncode(lastKeyObject);
+  String encodedLastKey = Uri.encodeComponent(jsonString);
+
+  return encodedLastKey;
 }

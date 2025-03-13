@@ -9,7 +9,6 @@ import 'package:AnimeTalk/utility/functions.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:math';
 import '../widgets/chat_message_bubble.dart';
 import '../widgets/typing_indicator.dart';
 
