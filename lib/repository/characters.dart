@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:AnimeTalk/core/network/api_client.dart';
 import 'package:AnimeTalk/core/network/api_endpoints.dart';
 import 'package:AnimeTalk/models/character_model.dart';
-import 'package:AnimeTalk/utility/functions.dart';
 
 class Characters {
   late ApiClient _apiClient;
@@ -13,16 +10,22 @@ class Characters {
   }
 
   Future<Map<String, dynamic>> getFeaturedCharacters(
-      int? limit, String? lastKey) async {
+      int? limit, String? nextPageToken) async {
+    Map<String, dynamic> queryParams = {'limit': limit ?? 10};
+
+    if (nextPageToken != null) {
+      queryParams['nextPageToken'] = nextPageToken;
+    }
+
     final response = await _apiClient.get(ApiEndpoints.featured,
-        queryParameters: {'limit': 8, 'lastKey': jsonEncode(lastKey)});
+        queryParameters: queryParams);
 
     if (response.data == null || !response.data.containsKey('data')) {
       throw Exception('Invalid response format: missing data property');
     }
 
     final List<dynamic> charactersData = response.data['data'];
-    final String? nextLastKey = response.data['lastKey'].toString();
+    final String? nextToken = response.data['nextPageToken'];
 
     return {
       'characters': charactersData
@@ -32,21 +35,27 @@ class Characters {
                 profileUrl: char['profileUrl'],
               ))
           .toList(),
-      'lastKey': nextLastKey,
+      'nextPageToken': nextToken,
     };
   }
 
   Future<Map<String, dynamic>> getAllCharacters(
-      int? limit, String? lastKey) async {
-    final response = await _apiClient.get(ApiEndpoints.all,
-        queryParameters: {'limit': 12, 'lastKey': jsonEncode(lastKey)});
+      int? limit, String? nextPageToken) async {
+    Map<String, dynamic> queryParams = {'limit': limit ?? 10};
+
+    if (nextPageToken != null) {
+      queryParams['nextPageToken'] = nextPageToken;
+    }
+
+    final response =
+        await _apiClient.get(ApiEndpoints.all, queryParameters: queryParams);
 
     if (response.data == null || !response.data.containsKey('data')) {
       throw Exception('Invalid response format: missing data property');
     }
 
     final List<dynamic> charactersData = response.data['data'];
-    final String? nextLastKey = response.data['lastKey'].toString();
+    final String? nextToken = response.data['nextPageToken'];
 
     return {
       'characters': charactersData
@@ -56,7 +65,7 @@ class Characters {
                 profileUrl: char['profileUrl'],
               ))
           .toList(),
-      'lastKey': nextLastKey,
+      'nextPageToken': nextToken,
     };
   }
 }

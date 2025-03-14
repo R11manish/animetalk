@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/character_model.dart';
 import '../viewmodels/home_viewmodel.dart';
 import 'character_card.dart';
 

@@ -11,8 +11,8 @@ class HomeViewModel extends ChangeNotifier {
 
   List<ICharacter> allCharacters = [];
   List<ICharacter> featuredCharacters = [];
-  String? lastKey;
-  String? featuredLastKey;
+  String? nextPageTokenCharacter;
+  String? nextPageTokenFeature;
   bool isLoading = false;
   bool hasMore = true;
   bool isLoadingFeatured = false;
@@ -27,7 +27,7 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> loadInitialCharacters() async {
     allCharacters.clear();
-    lastKey = null;
+    nextPageTokenCharacter = null;
     hasMore = true;
     await loadMoreCharacters();
   }
@@ -39,19 +39,18 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final response =
-          await _characterService.getAllCharacters(pageSize, lastKey);
+      final response = await _characterService.getAllCharacters(
+          pageSize, nextPageTokenCharacter);
       final List<ICharacter> characters = response['characters'];
-      final String? nextLastKey = response['lastKey'];
-
-      if (characters.isEmpty || nextLastKey == null) {
+      final String? nextToken = response['nextPageToken'];
+      if (characters.isEmpty || nextToken == null) {
         hasMore = false;
       } else {
         allCharacters.addAll(characters);
-        lastKey = nextLastKey;
+        nextPageTokenCharacter = nextToken;
       }
     } catch (e) {
-      hasMore = false;
+      hasMore = true;
       rethrow;
     } finally {
       isLoading = false;
@@ -61,7 +60,7 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> loadInitialFeaturedCharacters() async {
     featuredCharacters.clear();
-    featuredLastKey = null;
+    nextPageTokenFeature = null;
     hasMoreFeatured = true;
     await loadMoreFeaturedCharacters();
   }
@@ -74,15 +73,15 @@ class HomeViewModel extends ChangeNotifier {
 
     try {
       final response = await _characterService.getFeaturedCharacters(
-          pageSize, featuredLastKey);
+          pageSize, nextPageTokenFeature);
       final List<ICharacter> characters = response['characters'];
-      final String? nextLastKey = response['lastKey'];
+      final String? nextLastKey = response['nextPageToken'];
 
       if (characters.isEmpty || nextLastKey == null) {
         hasMoreFeatured = false;
       } else {
         featuredCharacters.addAll(characters);
-        featuredLastKey = nextLastKey;
+        nextPageTokenFeature = nextLastKey;
       }
     } catch (e) {
       hasMoreFeatured = false;

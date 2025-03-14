@@ -35,7 +35,6 @@ class Chat {
         charDesc: charDesc,
         messages: messages);
 
-    print(character.toJson());
     var response = await _apiClient.post(ApiEndpoints.chat,
         data: character.toJson(), requiresAuth: true);
 
