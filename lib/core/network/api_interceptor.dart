@@ -17,7 +17,6 @@ class ApiInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    print('🟢 RESPONSE[${response.statusCode}] => DATA: ${response.data}');
     handler.next(response);
   }
 

@@ -28,18 +28,26 @@ class HomeScreen extends StatelessWidget {
         ),
         body: RefreshIndicator(
           onRefresh: () async {
-            final viewModel = context.read<HomeViewModel>();
-            await Future.wait([
-              viewModel.loadInitialCharacters(),
-              viewModel.loadInitialFeaturedCharacters(),
-            ]);
+            try {
+              final viewModel = context.read<HomeViewModel>();
+              // Wait for both loading operations to complete
+              await Future.wait([
+                viewModel.loadInitialCharacters(),
+                // viewModel.loadInitialFeaturedCharacters(),
+              ]);
+            } catch (e) {
+              // Handle any errors during refresh
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Error refreshing: ${e.toString()}')),
+              );
+            }
           },
           child: const SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                FeaturedCharactersSection(),
+                // FeaturedCharactersSection(),
                 AllCharactersSection(),
               ],
             ),

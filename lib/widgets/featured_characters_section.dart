@@ -18,7 +18,12 @@ class _FeaturedCharactersSectionState extends State<FeaturedCharactersSection> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    _loadInitial();
+    // Use post-frame callback to avoid setState during build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _loadInitial();
+      }
+    });
   }
 
   @override
@@ -28,13 +33,21 @@ class _FeaturedCharactersSectionState extends State<FeaturedCharactersSection> {
   }
 
   void _loadInitial() {
-    context.read<HomeViewModel>().loadInitialFeaturedCharacters();
+    // Only call if we have no data yet
+    final viewModel = context.read<HomeViewModel>();
+    if (viewModel.featuredCharacters.isEmpty) {
+      viewModel.loadInitialFeaturedCharacters();
+    }
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent * 0.8) {
-      context.read<HomeViewModel>().loadMoreFeaturedCharacters();
+      // Use a debounce or throttle mechanism to avoid repeated calls
+      final viewModel = context.read<HomeViewModel>();
+      if (!viewModel.isLoadingFeatured && viewModel.hasMoreFeatured) {
+        viewModel.loadMoreFeaturedCharacters();
+      }
     }
   }
 

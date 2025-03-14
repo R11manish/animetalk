@@ -43,6 +43,7 @@ class HomeViewModel extends ChangeNotifier {
           pageSize, nextPageTokenCharacter);
       final List<ICharacter> characters = response['characters'];
       final String? nextToken = response['nextPageToken'];
+
       if (characters.isEmpty || nextToken == null) {
         hasMore = false;
       } else {
@@ -50,8 +51,7 @@ class HomeViewModel extends ChangeNotifier {
         nextPageTokenCharacter = nextToken;
       }
     } catch (e) {
-      hasMore = true;
-      rethrow;
+      hasMore = false;
     } finally {
       isLoading = false;
       notifyListeners();
@@ -75,17 +75,16 @@ class HomeViewModel extends ChangeNotifier {
       final response = await _characterService.getFeaturedCharacters(
           pageSize, nextPageTokenFeature);
       final List<ICharacter> characters = response['characters'];
-      final String? nextLastKey = response['nextPageToken'];
+      final String? nextToken = response['nextPageToken'];
 
-      if (characters.isEmpty || nextLastKey == null) {
+      if (characters.isEmpty || nextToken == null) {
         hasMoreFeatured = false;
       } else {
         featuredCharacters.addAll(characters);
-        nextPageTokenFeature = nextLastKey;
+        nextPageTokenFeature = nextToken;
       }
     } catch (e) {
       hasMoreFeatured = false;
-      rethrow;
     } finally {
       isLoadingFeatured = false;
       notifyListeners();

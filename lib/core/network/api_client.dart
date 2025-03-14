@@ -23,7 +23,6 @@ class ApiClient {
   Future<Response> get(String path,
       {Map<String, dynamic>? queryParameters}) async {
     try {
-      print(queryParameters);
       final response = await _dio.get(path, queryParameters: queryParameters);
       return response;
     } on DioException catch (e) {

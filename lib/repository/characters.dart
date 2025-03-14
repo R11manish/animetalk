@@ -55,7 +55,9 @@ class Characters {
     }
 
     final List<dynamic> charactersData = response.data['data'];
-    final String? nextToken = response.data['nextPageToken'];
+    final String? nextToken = response.data.containsKey('nextPageToken')
+        ? response.data['nextPageToken']
+        : null;
 
     return {
       'characters': charactersData

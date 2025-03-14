@@ -14,21 +14,31 @@ class _AllCharactersSectionState extends State<AllCharactersSection> {
   @override
   void initState() {
     super.initState();
-    _loadInitial();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _loadInitial();
+      }
+    });
   }
 
   void _loadInitial() {
-    context.read<HomeViewModel>().loadInitialCharacters();
+    final viewModel = context.read<HomeViewModel>();
+    if (viewModel.allCharacters.isEmpty) {
+      viewModel.loadInitialCharacters();
+    }
   }
 
   bool _handleScrollNotification(ScrollNotification notification) {
     if (notification is ScrollUpdateNotification) {
       final metrics = notification.metrics;
       if (metrics.pixels >= metrics.maxScrollExtent * 0.8) {
-        context.read<HomeViewModel>().loadMoreCharacters();
+        final viewModel = context.read<HomeViewModel>();
+        if (!viewModel.isLoading && viewModel.hasMore) {
+          viewModel.loadMoreCharacters();
+        }
       }
     }
-    return false; // Allow the notification to continue bubbling up
+    return false; 
   }
 
   @override
