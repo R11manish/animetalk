@@ -1,3 +1,4 @@
+import 'package:AnimeTalk/screens/discover_screen.dart';
 import 'package:AnimeTalk/screens/home_screen.dart';
 import 'package:AnimeTalk/screens/main_screen.dart';
 import 'package:AnimeTalk/screens/register_screen.dart';
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         '/main': (context) => const MainScreen(),
         '/home': (context) => const HomeScreen(),
-        '/register': (context) => const RegisterScreen()
+        '/register': (context) => const RegisterScreen(),
+        '/discover': (context) => const DiscoverScreen(),
       },
     );
   }

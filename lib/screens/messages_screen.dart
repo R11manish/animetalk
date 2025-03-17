@@ -73,12 +73,6 @@ class _MessagesScreen extends State<MessagesScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text('Messages'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: Column(
         children: [

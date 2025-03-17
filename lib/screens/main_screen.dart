@@ -1,3 +1,4 @@
+import 'package:AnimeTalk/screens/discover_screen.dart';
 import 'package:AnimeTalk/screens/fav_screen.dart';
 import 'package:AnimeTalk/screens/home_screen.dart';
 import 'package:AnimeTalk/screens/messages_screen.dart';
@@ -23,7 +24,7 @@ class _MainScreenState extends State<MainScreen> {
     const HomeScreen(),
     FavScreen(),
     MessagesScreen(),
-    const Center(child: Text('Discover')),
+    DiscoverScreen()
   ];
 
   @override
