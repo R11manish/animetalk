@@ -3,7 +3,9 @@ import 'package:AnimeTalk/screens/home_screen.dart';
 import 'package:AnimeTalk/screens/main_screen.dart';
 import 'package:AnimeTalk/screens/register_screen.dart';
 import 'package:AnimeTalk/screens/splash_screen.dart';
+import 'package:AnimeTalk/viewmodels/home_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'core/service_locator.dart';
 
 void main() {
@@ -16,20 +18,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'AnimeTalk',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => HomeViewModel()),
+        // Add other providers here as needed
+      ],
+      child: MaterialApp(
+        title: 'AnimeTalk',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const SplashScreen(),
+          '/main': (context) => const MainScreen(),
+          '/home': (context) => const HomeScreen(),
+          '/register': (context) => const RegisterScreen(),
+          '/discover': (context) => const DiscoverScreen(),
+        },
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const SplashScreen(),
-        '/main': (context) => const MainScreen(),
-        '/home': (context) => const HomeScreen(),
-        '/register': (context) => const RegisterScreen(),
-        '/discover': (context) => const DiscoverScreen(),
-      },
     );
   }
 }

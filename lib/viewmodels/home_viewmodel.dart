@@ -17,6 +17,8 @@ class HomeViewModel extends ChangeNotifier {
   bool hasMore = true;
   bool isLoadingFeatured = false;
   bool hasMoreFeatured = true;
+  bool _dataLoaded = false;
+  bool _featuredDataLoaded = false;
 
   HomeViewModel({
     char.Characters? characterService,
@@ -26,10 +28,17 @@ class HomeViewModel extends ChangeNotifier {
             characterRepository ?? getIt<CharacterRepository>();
 
   Future<void> loadInitialCharacters() async {
+    if (_dataLoaded && allCharacters.isNotEmpty) {
+      // Data already loaded, don't make the request again
+      notifyListeners();
+      return;
+    }
+
     allCharacters.clear();
     nextPageTokenCharacter = null;
     hasMore = true;
     await loadMoreCharacters();
+    _dataLoaded = true;
   }
 
   Future<void> loadMoreCharacters() async {
@@ -59,10 +68,17 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future<void> loadInitialFeaturedCharacters() async {
+    if (_featuredDataLoaded && featuredCharacters.isNotEmpty) {
+      // Featured data already loaded, don't make the request again
+      notifyListeners();
+      return;
+    }
+
     featuredCharacters.clear();
     nextPageTokenFeature = null;
     hasMoreFeatured = true;
     await loadMoreFeaturedCharacters();
+    _featuredDataLoaded = true;
   }
 
   Future<void> loadMoreFeaturedCharacters() async {
@@ -117,5 +133,15 @@ class HomeViewModel extends ChangeNotifier {
         favourite: true,
       );
     }
+  }
+
+  // Force refresh method to reload data when needed
+  Future<void> forceRefresh() async {
+    _dataLoaded = false;
+    _featuredDataLoaded = false;
+    await Future.wait([
+      loadInitialCharacters(),
+      loadInitialFeaturedCharacters(),
+    ]);
   }
 }
