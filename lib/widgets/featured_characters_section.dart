@@ -91,11 +91,22 @@ class _FeaturedCharactersSectionState extends State<FeaturedCharactersSection> {
                           );
                         }
 
+                        var currentCharacter =
+                            viewModel.featuredCharacters[index];
                         return SizedBox(
                           width: 160,
-                          child: CharacterCard(
-                            character: viewModel.featuredCharacters[index],
-                            isFeatured: true,
+                          child: StreamBuilder<bool>(
+                            stream:
+                                viewModel.watchCharIsFav(currentCharacter.name),
+                            builder: (context, snapshot) {
+                              return CharacterCard(
+                                character: currentCharacter,
+                                isFeatured: true,
+                                isFavorite: snapshot.data ?? false,
+                                onFavoritePressed: () => viewModel
+                                    .toggleFavCharacter(currentCharacter),
+                              );
+                            },
                           ),
                         );
                       },

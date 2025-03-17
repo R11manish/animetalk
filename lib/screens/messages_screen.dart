@@ -16,12 +16,38 @@ class MessagesScreen extends StatefulWidget {
 class _MessagesScreen extends State<MessagesScreen> {
   late final CharacterRepository characterRepository;
   late final MessageRepository messageRepository;
+  String searchQuery = '';
+  List<Character> allCharacters = [];
+  List<Character> filteredCharacters = [];
 
   @override
   void initState() {
     super.initState();
     characterRepository = getIt<CharacterRepository>();
     messageRepository = getIt<MessageRepository>();
+    _loadCharacters();
+  }
+
+  Future<void> _loadCharacters() async {
+    final characters = await characterRepository.getAllCharacters();
+    setState(() {
+      allCharacters = characters;
+      filteredCharacters = characters;
+    });
+  }
+
+  void _filterCharacters(String query) {
+    setState(() {
+      searchQuery = query;
+      if (query.isEmpty) {
+        filteredCharacters = allCharacters;
+      } else {
+        filteredCharacters = allCharacters
+            .where((character) =>
+                character.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+    });
   }
 
   String getTimeAgo(DateTime dateTime) {
@@ -45,10 +71,7 @@ class _MessagesScreen extends State<MessagesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false,
         title: const Text('Messages'),
         actions: [
           IconButton(
@@ -63,7 +86,7 @@ class _MessagesScreen extends State<MessagesScreen> {
             padding: const EdgeInsets.all(16.0),
             child: TextField(
               decoration: InputDecoration(
-                hintText: 'Search messages...',
+                hintText: 'Search characters...',
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25),
@@ -73,88 +96,77 @@ class _MessagesScreen extends State<MessagesScreen> {
                 fillColor: Colors.grey[200],
               ),
               onChanged: (value) {
-                // TODO: Implement search functionality
+                _filterCharacters(value);
               },
             ),
           ),
           Expanded(
-            child: FutureBuilder<List<Character>>(
-              future: characterRepository.getAllCharacters(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+            child: allCharacters.isEmpty
+                ? const Center(child: Text('No message found'))
+                : filteredCharacters.isEmpty
+                    ? Center(
+                        child:
+                            Text('No characters found matching "$searchQuery"'))
+                    : ListView.separated(
+                        itemCount: filteredCharacters.length,
+                        separatorBuilder: (context, index) =>
+                            const Divider(height: 1),
+                        itemBuilder: (context, index) {
+                          final character = filteredCharacters[index];
 
-                if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
+                          return FutureBuilder<Message?>(
+                            future: messageRepository
+                                .getLatestMessage(character.id),
+                            builder: (context, messageSnapshot) {
+                              final latestMessage = messageSnapshot.data;
 
-                if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('No messages yet'));
-                }
-
-                final characters = snapshot.data!;
-
-                return ListView.separated(
-                  itemCount: characters.length,
-                  separatorBuilder: (context, index) =>
-                      const Divider(height: 1),
-                  itemBuilder: (context, index) {
-                    final character = characters[index];
-
-                    return FutureBuilder<Message?>(
-                      future: messageRepository.getLatestMessage(character.id),
-                      builder: (context, messageSnapshot) {
-                        final latestMessage = messageSnapshot.data;
-
-                        return ListTile(
-                          leading: CircleAvatar(
-                            radius: 25,
-                            backgroundImage: NetworkImage(character.profileUrl),
-                          ),
-                          title: Text(
-                            character.name,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          subtitle: Text(
-                            latestMessage?.message ?? 'No messages yet',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          trailing: Text(
-                            latestMessage != null
-                                ? getTimeAgo(latestMessage.createdAt)
-                                : '',
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 12,
-                            ),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ChatScreen(
-                                  characterName: character.name,
-                                  characterDesc: character.description,
-                                  characterImage: character.profileUrl,
+                              return ListTile(
+                                leading: CircleAvatar(
+                                  radius: 25,
+                                  backgroundImage:
+                                      NetworkImage(character.profileUrl),
                                 ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    );
-                  },
-                );
-              },
-            ),
+                                title: Text(
+                                  character.name,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  latestMessage?.message ?? 'No messages yet',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                trailing: Text(
+                                  latestMessage != null
+                                      ? getTimeAgo(latestMessage.createdAt)
+                                      : '',
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 8,
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ChatScreen(
+                                        characterName: character.name,
+                                        characterDesc: character.description,
+                                        characterImage: character.profileUrl,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          );
+                        },
+                      ),
           ),
         ],
       ),

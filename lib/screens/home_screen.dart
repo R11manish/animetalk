@@ -17,14 +17,14 @@ class HomeScreen extends StatelessWidget {
             'AnimeTalk',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                // Add settings functionality
-              },
-            ),
-          ],
+          // actions: [
+          //   IconButton(
+          //     icon: const Icon(Icons.settings),
+          //     onPressed: () {
+          //       // Add settings functionality
+          //     },
+          //   ),
+          // ],
         ),
         body: RefreshIndicator(
           onRefresh: () async {
@@ -47,7 +47,7 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // FeaturedCharactersSection(),
+                FeaturedCharactersSection(),
                 AllCharactersSection(),
               ],
             ),

@@ -11,6 +11,8 @@ class AllCharactersSection extends StatefulWidget {
 }
 
 class _AllCharactersSectionState extends State<AllCharactersSection> {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -19,6 +21,20 @@ class _AllCharactersSectionState extends State<AllCharactersSection> {
         _loadInitial();
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
   }
 
   void _loadInitial() {
@@ -38,7 +54,7 @@ class _AllCharactersSectionState extends State<AllCharactersSection> {
         }
       }
     }
-    return false; 
+    return false;
   }
 
   @override
@@ -46,57 +62,76 @@ class _AllCharactersSectionState extends State<AllCharactersSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text(
-            'All Characters',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'All Characters',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.arrow_upward),
+                onPressed: _scrollToTop,
+                tooltip: 'Back to top',
+              ),
+            ],
           ),
         ),
-        Consumer<HomeViewModel>(
-          builder: (context, viewModel, child) {
-            return NotificationListener<ScrollNotification>(
-              onNotification: _handleScrollNotification,
-              child: Container(
-                height: MediaQuery.of(context).size.height -
-                    150, // Adjust height as needed
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(8.0),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.8,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                  ),
-                  itemCount: viewModel.allCharacters.length +
-                      (viewModel.hasMore ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index >= viewModel.allCharacters.length) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    }
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final availableHeight = MediaQuery.of(context).size.height - 200;
 
-                    var currentCharacter = viewModel.allCharacters[index];
-                    return StreamBuilder<bool>(
-                      stream: viewModel.watchCharIsFav(currentCharacter.name),
-                      builder: (context, snapshot) {
-                        return CharacterCard(
-                          character: currentCharacter,
-                          isFavorite: snapshot.data ?? false,
-                          onFavoritePressed: () =>
-                              viewModel.toggleFavCharacter(currentCharacter),
+            return SizedBox(
+              height: availableHeight,
+              child: Consumer<HomeViewModel>(
+                builder: (context, viewModel, child) {
+                  return NotificationListener<ScrollNotification>(
+                    onNotification: _handleScrollNotification,
+                    child: GridView.builder(
+                      controller: _scrollController,
+                      physics: const ClampingScrollPhysics(),
+                      padding: const EdgeInsets.all(8.0),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.8,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      itemCount: viewModel.allCharacters.length +
+                          (viewModel.hasMore ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (index >= viewModel.allCharacters.length) {
+                          return const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        }
+
+                        var currentCharacter = viewModel.allCharacters[index];
+                        return StreamBuilder<bool>(
+                          stream:
+                              viewModel.watchCharIsFav(currentCharacter.name),
+                          builder: (context, snapshot) {
+                            return CharacterCard(
+                              character: currentCharacter,
+                              isFavorite: snapshot.data ?? false,
+                              onFavoritePressed: () => viewModel
+                                  .toggleFavCharacter(currentCharacter),
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
             );
           },
