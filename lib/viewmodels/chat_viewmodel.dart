@@ -47,11 +47,11 @@ class ChatViewModel extends ChangeNotifier {
   Future<void> _initialize() async {
     characterId = await getCharacterId(characterName);
     if (characterId != null) {
-      await _loadMessages();
+      await loadMessages();
     }
   }
 
-  Future<void> _loadMessages() async {
+  Future<void> loadMessages() async {
     if (characterId != null) {
       final loadedMessages =
           await _messageRepository.getMessagesByCharacterId(characterId!);
@@ -63,13 +63,6 @@ class ChatViewModel extends ChangeNotifier {
   Future<int?> getCharacterId(String name) async {
     Character? ch = await _characterRepository.getCharacterByName(name);
     return ch?.id;
-  }
-
-  Stream<List<Message>> watchMessages() {
-    if (characterId != null) {
-      return _messageRepository.watchMessagesByCharacterId(characterId!);
-    }
-    return Stream.value([]);
   }
 
   Future<int> getOrCreateCharacterId() async {
@@ -114,6 +107,16 @@ class ChatViewModel extends ChangeNotifier {
         Role.user,
       );
 
+      // Add the new message to our local list
+      messages.add(Message(
+        id: messages.length + 1, // Temporary ID, will be updated when saved
+        characterId: id,
+        role: Role.user.name,
+        message: messageText,
+        createdAt: DateTime.now(),
+      ));
+      notifyListeners();
+
       // Create LLMessage from user input
       final newMessage = LLMessage(role: 'user', content: messageText);
       final llMessages = convertToLLMessages(messages);
@@ -125,6 +128,9 @@ class ChatViewModel extends ChangeNotifier {
         // Send message to API
         await _chatService.sendMessage(
             id, characterName, characterDesc, [...llMessages, newMessage]);
+
+        // Reload messages to get the actual saved messages with correct IDs
+        await loadMessages();
       } catch (e) {
         // Handle error
         print('Error sending message: $e');

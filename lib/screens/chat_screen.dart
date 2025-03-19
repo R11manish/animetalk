@@ -183,93 +183,80 @@ class _ChatScreenState extends State<ChatScreen> {
                 return const Center(child: Text('No messages yet'));
               }
 
-              return StreamBuilder<List<Message>>(
-                stream: viewModel.watchMessages(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+              // Use the local messages list instead of stream
+              final messages = viewModel.messages;
+
+              if (messages.isEmpty) {
+                return const Center(child: Text('No messages yet'));
+              }
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (_scrollController.hasClients) {
+                  _scrollController.animateTo(
+                    _scrollController.position.maxScrollExtent + 300,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOut,
+                  );
+                }
+              });
+
+              return ListView.builder(
+                controller: _scrollController,
+                padding: const EdgeInsets.all(16),
+                itemCount: viewModel.isCharacterTyping
+                    ? messages.length + 1
+                    : messages.length,
+                itemBuilder: (context, index) {
+                  if (viewModel.isCharacterTyping && index == messages.length) {
+                    return TypingIndicator(
+                      characterImage: widget.characterImage,
+                    );
                   }
-
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  }
-
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text('No messages yet'));
-                  }
-
-                  final messages = snapshot.data!;
-                  // Update currentMessages when stream provides new data
-                  viewModel.messages = messages;
-
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (_scrollController.hasClients) {
-                      _scrollController.animateTo(
-                        _scrollController.position.maxScrollExtent + 300,
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeOut,
+                  final message = messages[index];
+                  return ChatMessageBubble(
+                    message: message,
+                    characterImage: widget.characterImage,
+                    onDelete: (messageId) async {
+                      // Show loading indicator
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Row(
+                            children: [
+                              SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(width: 16),
+                              Text('Deleting message...'),
+                            ],
+                          ),
+                          duration: Duration(seconds: 1),
+                        ),
                       );
-                    }
-                  });
 
-                  return ListView.builder(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.all(16),
-                    itemCount: viewModel.isCharacterTyping
-                        ? messages.length + 1
-                        : messages.length,
-                    itemBuilder: (context, index) {
-                      if (viewModel.isCharacterTyping &&
-                          index == messages.length) {
-                        return TypingIndicator(
-                          characterImage: widget.characterImage,
+                      try {
+                        await viewModel.deleteMessage(messageId);
+                        // Reload messages after deletion
+                        await viewModel.loadMessages();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Message deleted'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Failed to delete message: $e'),
+                            backgroundColor: Colors.red,
+                            duration: const Duration(seconds: 3),
+                          ),
                         );
                       }
-                      final message = messages[index];
-                      return ChatMessageBubble(
-                        message: message,
-                        characterImage: widget.characterImage,
-                        onDelete: (messageId) async {
-                          // Show loading indicator
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Row(
-                                children: [
-                                  SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  SizedBox(width: 16),
-                                  Text('Deleting message...'),
-                                ],
-                              ),
-                              duration: Duration(seconds: 1),
-                            ),
-                          );
-
-                          try {
-                            await viewModel.deleteMessage(messageId);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Message deleted'),
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Failed to delete message: $e'),
-                                backgroundColor: Colors.red,
-                                duration: const Duration(seconds: 3),
-                              ),
-                            );
-                          }
-                        },
-                      );
                     },
                   );
                 },
