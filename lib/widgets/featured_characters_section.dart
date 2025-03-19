@@ -112,12 +112,7 @@ class _FeaturedCharactersSectionState extends State<FeaturedCharactersSection> {
                       },
                     ),
                   ),
-                  if (viewModel.isLoadingFeatured &&
-                      viewModel.featuredCharacters.isNotEmpty)
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Center(child: CircularProgressIndicator()),
-                    ),
+                 
                 ],
               );
             },

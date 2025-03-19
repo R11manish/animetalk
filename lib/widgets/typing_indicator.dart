@@ -6,9 +6,9 @@ class TypingIndicator extends StatefulWidget {
   final String characterImage;
 
   const TypingIndicator({
-    Key? key,
+    super.key,
     required this.characterImage,
-  }) : super(key: key);
+  });
 
   @override
   State<TypingIndicator> createState() => _TypingIndicatorState();
