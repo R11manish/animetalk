@@ -4,6 +4,7 @@ import 'package:AnimeTalk/data/repositories/character_repository.dart';
 import 'package:AnimeTalk/data/repositories/message_repository.dart';
 import 'package:AnimeTalk/services/token_service.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter/material.dart';
 
 final getIt = GetIt.instance;
 
@@ -23,4 +24,8 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<MessageRepository>(
     () => MessageRepository(getIt<AppDatabase>()),
   );
+
+  // Register the GlobalKey<NavigatorState>
+  getIt.registerLazySingleton<GlobalKey<NavigatorState>>(
+      () => GlobalKey<NavigatorState>());
 }

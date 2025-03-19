@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
         // Add other providers here as needed
       ],
       child: MaterialApp(
+        navigatorKey: getIt<GlobalKey<NavigatorState>>(),
         title: 'AnimeTalk',
         theme: ThemeData(
           primarySwatch: Colors.blue,

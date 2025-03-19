@@ -6,6 +6,8 @@ import 'package:AnimeTalk/data/repositories/message_repository.dart';
 import 'package:AnimeTalk/models/llm_message.dart';
 import 'package:AnimeTalk/models/user_details.dart';
 import 'package:AnimeTalk/services/token_service.dart';
+import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 
 class Chat {
   late ApiClient _apiClient;
@@ -35,14 +37,30 @@ class Chat {
         charDesc: charDesc,
         messages: messages);
 
-    var response = await _apiClient.post(ApiEndpoints.chat,
-        data: character.toJson(), requiresAuth: true);
+    try {
+      var response = await _apiClient.post(ApiEndpoints.chat,
+          data: character.toJson(), requiresAuth: true);
 
-    if (response.statusCode == 200) {
-      messageRepository.createMessage(
-          characterId: id,
-          role: 'assistant',
-          message: response.data?['message']);
+      if (response.statusCode == 200) {
+        messageRepository.createMessage(
+            characterId: id,
+            role: 'assistant',
+            message: response.data?['message']);
+      }
+    } catch (e) {
+      if (e is DioException && e.response?.statusCode == 429) {
+        // Show rate limit exceeded message
+        ScaffoldMessenger.of(getIt<GlobalKey<NavigatorState>>().currentContext!)
+            .showSnackBar(
+          const SnackBar(
+            content: Text(
+                'Message limit exceeded. Please try again after 12 hours.'),
+            duration: Duration(seconds: 5),
+          ),
+        );
+      } else {
+        rethrow; // Rethrow other errors
+      }
     }
   }
 }
