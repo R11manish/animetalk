@@ -4,7 +4,9 @@ import '../viewmodels/home_viewmodel.dart';
 import 'character_card.dart';
 
 class AllCharactersSection extends StatefulWidget {
-  const AllCharactersSection({super.key});
+  final ScrollController parentScrollController;
+
+  const AllCharactersSection({super.key, required this.parentScrollController});
 
   @override
   State<AllCharactersSection> createState() => _AllCharactersSectionState();
@@ -30,7 +32,7 @@ class _AllCharactersSectionState extends State<AllCharactersSection> {
   }
 
   void _scrollToTop() {
-    _scrollController.animateTo(
+    widget.parentScrollController.animateTo(
       0,
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
@@ -75,7 +77,7 @@ class _AllCharactersSectionState extends State<AllCharactersSection> {
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.arrow_upward),
+                icon: const Icon(Icons.keyboard_double_arrow_up_rounded),
                 onPressed: _scrollToTop,
                 tooltip: 'Back to top',
               ),

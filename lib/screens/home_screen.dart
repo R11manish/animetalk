@@ -12,10 +12,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
-    // Load data when the screen initializes if not already loaded
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final viewModel = Provider.of<HomeViewModel>(context, listen: false);
       viewModel.loadInitialCharacters();
@@ -31,35 +33,28 @@ class _HomeScreenState extends State<HomeScreen> {
           'AnimeTalk',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        // actions: [
-        //   IconButton(
-        //     icon: const Icon(Icons.settings),
-        //     onPressed: () {
-        //       // Add settings functionality
-        //     },
-        //   ),
-        // ],
       ),
       body: RefreshIndicator(
         onRefresh: () async {
           try {
             final viewModel = context.read<HomeViewModel>();
-            // Force refresh data when user pulls to refresh
             await viewModel.forceRefresh();
           } catch (e) {
-            // Handle any errors during refresh
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Error refreshing: ${e.toString()}')),
             );
           }
         },
-        child: const SingleChildScrollView(
+        child: SingleChildScrollView(
+          controller: _scrollController,
           physics: AlwaysScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               FeaturedCharactersSection(),
-              AllCharactersSection(),
+              AllCharactersSection(
+                parentScrollController: _scrollController,
+              ),
             ],
           ),
         ),
