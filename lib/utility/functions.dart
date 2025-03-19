@@ -1,5 +1,5 @@
-import 'package:AnimeTalk/data/database/database.dart';
-import 'package:AnimeTalk/models/llm_message.dart';
+import 'package:animetalk/data/database/database.dart';
+import 'package:animetalk/models/llm_message.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String isFirstTimeKey = 'isFirstTime';
@@ -20,5 +20,3 @@ List<LLMessage> convertToLLMessages(List<Message> messages) {
       .map((msg) => LLMessage(role: msg.role, content: msg.message))
       .toList();
 }
-
-

@@ -1,8 +1,8 @@
-import 'package:AnimeTalk/screens/discover_screen.dart';
-import 'package:AnimeTalk/screens/fav_screen.dart';
-import 'package:AnimeTalk/screens/home_screen.dart';
-import 'package:AnimeTalk/screens/messages_screen.dart';
-import 'package:AnimeTalk/widgets/bottom_nav_bar.dart';
+import 'package:animetalk/screens/discover_screen.dart';
+import 'package:animetalk/screens/fav_screen.dart';
+import 'package:animetalk/screens/home_screen.dart';
+import 'package:animetalk/screens/messages_screen.dart';
+import 'package:animetalk/widgets/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {

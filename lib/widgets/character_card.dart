@@ -1,9 +1,9 @@
-import 'package:AnimeTalk/data/repositories/character_repository.dart';
-import 'package:AnimeTalk/models/character_model.dart';
-import 'package:AnimeTalk/screens/chat_screen.dart';
+import 'package:animetalk/data/repositories/character_repository.dart';
+import 'package:animetalk/models/character_model.dart';
+import 'package:animetalk/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:AnimeTalk/core/service_locator.dart';
+import 'package:animetalk/core/service_locator.dart';
 
 class CharacterCard extends StatelessWidget {
   final ICharacter character;

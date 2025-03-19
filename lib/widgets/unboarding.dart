@@ -1,5 +1,5 @@
-import 'package:AnimeTalk/constants/app_logo.dart';
-import 'package:AnimeTalk/models/user_details.dart';
+import 'package:animetalk/constants/app_logo.dart';
+import 'package:animetalk/models/user_details.dart';
 import 'package:flutter/material.dart';
 
 class UserOnboardingDialog extends StatefulWidget {
@@ -17,7 +17,6 @@ class UserOnboardingDialog extends StatefulWidget {
 class _UserOnboardingDialogState extends State<UserOnboardingDialog> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
-
   DateTime? _selectedDate;
   String _selectedGender = '';
 

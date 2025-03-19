@@ -1,6 +1,6 @@
-import 'package:AnimeTalk/constants/types.dart';
-import 'package:AnimeTalk/data/database/database.dart';
-import 'package:AnimeTalk/viewmodels/chat_viewmodel.dart';
+import 'package:animetalk/constants/types.dart';
+import 'package:animetalk/data/database/database.dart';
+import 'package:animetalk/viewmodels/chat_viewmodel.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:AnimeTalk/core/service_locator.dart';
-import 'package:AnimeTalk/data/repositories/character_repository.dart';
-import 'package:AnimeTalk/models/character_model.dart';
-import 'package:AnimeTalk/repository/characters.dart' as char;
+import 'package:animetalk/core/service_locator.dart';
+import 'package:animetalk/data/repositories/character_repository.dart';
+import 'package:animetalk/models/character_model.dart';
+import 'package:animetalk/repository/characters.dart' as char;
 
 class HomeViewModel extends ChangeNotifier {
   final char.Characters _characterService;
@@ -28,8 +28,7 @@ class HomeViewModel extends ChangeNotifier {
             characterRepository ?? getIt<CharacterRepository>();
 
   Future<void> loadInitialCharacters() async {
-    if (_dataLoaded && allCharacters.isNotEmpty) {
-      // Data already loaded, don't make the request again
+    if (_dataLoaded && allCharacters.isNotEmpty) {    // Data already loaded, don't make the request again
       notifyListeners();
       return;
     }

@@ -1,8 +1,8 @@
-import 'package:AnimeTalk/core/service_locator.dart';
-import 'package:AnimeTalk/data/repositories/character_repository.dart';
-import 'package:AnimeTalk/data/repositories/message_repository.dart';
-import 'package:AnimeTalk/data/database/database.dart';
-import 'package:AnimeTalk/screens/chat_screen.dart';
+import 'package:animetalk/core/service_locator.dart';
+import 'package:animetalk/data/repositories/character_repository.dart';
+import 'package:animetalk/data/repositories/message_repository.dart';
+import 'package:animetalk/data/database/database.dart';
+import 'package:animetalk/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

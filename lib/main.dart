@@ -1,10 +1,10 @@
-import 'package:AnimeTalk/screens/discover_screen.dart';
-import 'package:AnimeTalk/screens/home_screen.dart';
-import 'package:AnimeTalk/screens/main_screen.dart';
-import 'package:AnimeTalk/screens/register_screen.dart';
-import 'package:AnimeTalk/screens/splash_screen.dart';
-import 'package:AnimeTalk/services/ad_service.dart';
-import 'package:AnimeTalk/viewmodels/home_viewmodel.dart';
+import 'package:animetalk/screens/discover_screen.dart';
+import 'package:animetalk/screens/home_screen.dart';
+import 'package:animetalk/screens/main_screen.dart';
+import 'package:animetalk/screens/register_screen.dart';
+import 'package:animetalk/screens/splash_screen.dart';
+import 'package:animetalk/services/ad_service.dart';
+import 'package:animetalk/viewmodels/home_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/service_locator.dart';

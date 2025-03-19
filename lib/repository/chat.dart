@@ -1,11 +1,11 @@
-import 'package:AnimeTalk/constants/types.dart';
-import 'package:AnimeTalk/core/network/api_client.dart';
-import 'package:AnimeTalk/core/network/api_endpoints.dart';
-import 'package:AnimeTalk/core/service_locator.dart';
-import 'package:AnimeTalk/data/repositories/message_repository.dart';
-import 'package:AnimeTalk/models/llm_message.dart';
-import 'package:AnimeTalk/models/user_details.dart';
-import 'package:AnimeTalk/services/token_service.dart';
+import 'package:animetalk/constants/types.dart';
+import 'package:animetalk/core/network/api_client.dart';
+import 'package:animetalk/core/network/api_endpoints.dart';
+import 'package:animetalk/core/service_locator.dart';
+import 'package:animetalk/data/repositories/message_repository.dart';
+import 'package:animetalk/models/llm_message.dart';
+import 'package:animetalk/models/user_details.dart';
+import 'package:animetalk/services/token_service.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 

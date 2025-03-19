@@ -1,11 +1,11 @@
-import 'package:AnimeTalk/constants/types.dart';
-import 'package:AnimeTalk/core/service_locator.dart';
-import 'package:AnimeTalk/data/database/database.dart';
-import 'package:AnimeTalk/data/repositories/character_repository.dart';
-import 'package:AnimeTalk/data/repositories/message_repository.dart';
-import 'package:AnimeTalk/models/llm_message.dart';
-import 'package:AnimeTalk/repository/chat.dart';
-import 'package:AnimeTalk/utility/functions.dart';
+import 'package:animetalk/constants/types.dart';
+import 'package:animetalk/core/service_locator.dart';
+import 'package:animetalk/data/database/database.dart';
+import 'package:animetalk/data/repositories/character_repository.dart';
+import 'package:animetalk/data/repositories/message_repository.dart';
+import 'package:animetalk/models/llm_message.dart';
+import 'package:animetalk/repository/chat.dart';
+import 'package:animetalk/utility/functions.dart';
 import 'package:flutter/material.dart';
 
 class ChatViewModel extends ChangeNotifier {

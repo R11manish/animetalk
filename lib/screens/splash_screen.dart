@@ -1,5 +1,5 @@
-import 'package:AnimeTalk/constants/app_logo.dart';
-import 'package:AnimeTalk/utility/functions.dart';
+import 'package:animetalk/constants/app_logo.dart';
+import 'package:animetalk/utility/functions.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {

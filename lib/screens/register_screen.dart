@@ -1,9 +1,9 @@
-import 'package:AnimeTalk/repository/register.dart';
-import 'package:AnimeTalk/utility/functions.dart';
-import 'package:AnimeTalk/widgets/otp_verification.dart';
-import 'package:AnimeTalk/widgets/unboarding.dart';
+import 'package:animetalk/repository/register.dart';
+import 'package:animetalk/utility/functions.dart';
+import 'package:animetalk/widgets/otp_verification.dart';
+import 'package:animetalk/widgets/unboarding.dart';
 import 'package:flutter/material.dart';
-import 'package:AnimeTalk/models/user_details.dart';
+import 'package:animetalk/models/user_details.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});

@@ -1,4 +1,4 @@
-import 'package:AnimeTalk/data/database/database.dart';
+import 'package:animetalk/data/database/database.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';

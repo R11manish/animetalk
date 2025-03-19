@@ -1,9 +1,9 @@
-import 'package:AnimeTalk/constants/types.dart';
-import 'package:AnimeTalk/core/network/api_client.dart';
-import 'package:AnimeTalk/core/network/api_endpoints.dart';
-import 'package:AnimeTalk/core/service_locator.dart';
-import 'package:AnimeTalk/models/user_details.dart';
-import 'package:AnimeTalk/services/token_service.dart';
+import 'package:animetalk/constants/types.dart';
+import 'package:animetalk/core/network/api_client.dart';
+import 'package:animetalk/core/network/api_endpoints.dart';
+import 'package:animetalk/core/service_locator.dart';
+import 'package:animetalk/models/user_details.dart';
+import 'package:animetalk/services/token_service.dart';
 
 class Register {
   late ApiClient _apiClient;

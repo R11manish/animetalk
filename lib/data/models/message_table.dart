@@ -1,4 +1,4 @@
-import 'package:AnimeTalk/data/models/character_table.dart';
+import 'package:animetalk/data/models/character_table.dart';
 import 'package:drift/drift.dart';
 
 class Messages extends Table {

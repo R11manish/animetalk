@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:AnimeTalk/constants/app_logo.dart';
+import 'package:animetalk/constants/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

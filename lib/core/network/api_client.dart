@@ -1,5 +1,5 @@
-import 'package:AnimeTalk/core/service_locator.dart';
-import 'package:AnimeTalk/services/token_service.dart';
+import 'package:animetalk/core/service_locator.dart';
+import 'package:animetalk/services/token_service.dart';
 import 'package:dio/dio.dart';
 import 'api_interceptor.dart';
 import 'api_endpoints.dart';

@@ -1,8 +1,8 @@
-import 'package:AnimeTalk/core/service_locator.dart';
-import 'package:AnimeTalk/data/database/database.dart';
-import 'package:AnimeTalk/data/repositories/character_repository.dart';
-import 'package:AnimeTalk/models/character_model.dart';
-import 'package:AnimeTalk/widgets/character_card.dart';
+import 'package:animetalk/core/service_locator.dart';
+import 'package:animetalk/data/database/database.dart';
+import 'package:animetalk/data/repositories/character_repository.dart';
+import 'package:animetalk/models/character_model.dart';
+import 'package:animetalk/widgets/character_card.dart';
 import 'package:flutter/material.dart';
 
 class FavScreen extends StatelessWidget {

@@ -1,4 +1,4 @@
-import 'package:AnimeTalk/data/database/database.dart';
+import 'package:animetalk/data/database/database.dart';
 import 'package:drift/drift.dart';
 
 class MessageRepository {

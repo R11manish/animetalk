@@ -1,6 +1,6 @@
-import 'package:AnimeTalk/core/network/api_client.dart';
-import 'package:AnimeTalk/core/network/api_endpoints.dart';
-import 'package:AnimeTalk/models/character_model.dart';
+import 'package:animetalk/core/network/api_client.dart';
+import 'package:animetalk/core/network/api_endpoints.dart';
+import 'package:animetalk/models/character_model.dart';
 
 class Characters {
   late ApiClient _apiClient;
