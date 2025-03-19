@@ -3,12 +3,15 @@ import 'package:AnimeTalk/screens/home_screen.dart';
 import 'package:AnimeTalk/screens/main_screen.dart';
 import 'package:AnimeTalk/screens/register_screen.dart';
 import 'package:AnimeTalk/screens/splash_screen.dart';
+import 'package:AnimeTalk/services/ad_service.dart';
 import 'package:AnimeTalk/viewmodels/home_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/service_locator.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AdService.initialize();
   setupServiceLocator();
   runApp(const MyApp());
 }

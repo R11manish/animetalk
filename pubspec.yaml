@@ -23,6 +23,7 @@ dependencies:
   jailbreak_root_detection: ^1.1.5
   dio: ^5.8.0+1
   flutter_markdown: ^0.6.18
+  google_mobile_ads: ^4.0.0
 
 dev_dependencies:
   flutter_test:

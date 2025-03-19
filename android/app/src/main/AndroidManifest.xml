@@ -4,6 +4,9 @@
         android:label="AnimeTalk"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-8083231867045783~2531505005"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
