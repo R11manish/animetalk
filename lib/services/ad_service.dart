@@ -14,7 +14,7 @@ class AdService {
     await MobileAds.instance.initialize();
   }
 
-  static Future<String> _getAdUnitId() async {
+  static Future<String?> _getAdUnitId() async {
     if (kDebugMode) {
       return 'ca-app-pub-3940256099942544/6300978111'; // Test ID during development
     }
@@ -23,7 +23,7 @@ class AdService {
       final isCacheValid =
           DateTime.now().difference(_lastFetchTime!) < _cacheValidityDuration;
       if (isCacheValid) {
-        return _cachedAdUnitId!;
+        return _cachedAdUnitId;
       }
     }
 
@@ -38,15 +38,17 @@ class AdService {
       }
       throw Exception('Failed to load ad unit ID');
     } catch (e) {
-      return _cachedAdUnitId ?? 'ca-app-pub-3940256099942544/6300978111';
+      return null;
     }
   }
 
-  static Future<BannerAd> createBannerAd({
+  static Future<BannerAd?> createBannerAd({
     required Function(Ad ad) onAdLoaded,
     required Function(Ad ad, LoadAdError error) onAdFailedToLoad,
   }) async {
     final adUnitId = await _getAdUnitId();
+    if (adUnitId == null) return null;
+
     return BannerAd(
       adUnitId: adUnitId,
       size: AdSize.banner,
