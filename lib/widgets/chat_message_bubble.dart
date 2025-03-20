@@ -37,7 +37,7 @@ class ChatMessageBubble extends StatelessWidget {
             const SizedBox(width: 8),
           ],
           GestureDetector(
-            onLongPress: () {
+            onDoubleTap: () {
               if (onDelete != null) {
                 _showDeleteDialog(context);
               }
@@ -129,27 +129,6 @@ class ChatMessageBubble extends StatelessWidget {
                         fontSize: 12,
                       ),
                     ),
-                    if (isUserMessage && onDelete != null) ...[
-                      const SizedBox(height: 4),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.touch_app,
-                            size: 12,
-                            color: Colors.white54,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            'Hold to delete',
-                            style: TextStyle(
-                              color: Colors.white54,
-                              fontSize: 10,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
                   ],
                 ),
               ),
@@ -169,11 +148,15 @@ class ChatMessageBubble extends StatelessWidget {
         content: const Text('Are you sure you want to delete this message?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+              Navigator.of(context).pop();
+            },
             child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
+              FocusManager.instance.primaryFocus?.unfocus();
               onDelete?.call(message.id);
               Navigator.of(context).pop();
             },
