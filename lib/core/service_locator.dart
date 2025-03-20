@@ -1,4 +1,4 @@
-import 'package:animetalk/core/api/api_client.dart';
+import 'package:animetalk/core/network/api_client.dart';
 import 'package:animetalk/data/database/database.dart';
 import 'package:animetalk/data/repositories/character_repository.dart';
 import 'package:animetalk/data/repositories/message_repository.dart';
@@ -11,9 +11,7 @@ final getIt = GetIt.instance;
 void setupServiceLocator() {
   getIt.registerLazySingleton<AppDatabase>(() => AppDatabase());
 
-  getIt.registerLazySingleton<ApiClient>(() => ApiClient(
-        useMockData: true,
-      ));
+  getIt.registerLazySingleton<ApiClient>(() => ApiClient());
 
   getIt.registerLazySingleton<TokenService>(() => TokenService());
 

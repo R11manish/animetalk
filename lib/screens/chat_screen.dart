@@ -100,7 +100,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     width: 8,
                     height: 8,
                     decoration: const BoxDecoration(
-                      color: Colors.green,
+                      color: Colors.yellow,
                       shape: BoxShape.circle,
                     ),
                   ),

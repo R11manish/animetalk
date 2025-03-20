@@ -1,6 +1,6 @@
 class ApiEndpoints {
-  static const String baseUrl = 'http://192.168.4.153:3000/';
-  // 'https://alf9kf9ukl.execute-api.ap-south-1.amazonaws.com/';
+  static const String baseUrl =
+      'https://alf9kf9ukl.execute-api.ap-south-1.amazonaws.com/';
 
   //otp
   static const String sendOtp = '/otp/send-otp';
