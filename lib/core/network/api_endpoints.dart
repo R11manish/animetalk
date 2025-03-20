@@ -20,4 +20,7 @@ class ApiEndpoints {
   static const String featured = 'characters/featured';
 
   static const String all = 'characters/all';
+
+  //ads
+  static const String adUnitId = '/ad-settings';
 }

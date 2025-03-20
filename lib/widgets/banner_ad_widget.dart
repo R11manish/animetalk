@@ -19,20 +19,24 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
     _loadBannerAd();
   }
 
-  void _loadBannerAd() {
-    _bannerAd = AdService.createBannerAd(
-      onAdLoaded: (Ad ad) {
-        setState(() {
-          _isAdLoaded = true;
-        });
-      },
-      onAdFailedToLoad: (Ad ad, LoadAdError error) {
-        ad.dispose();
-        print('Banner ad failed to load: $error');
-      },
-    );
+  Future<void> _loadBannerAd() async {
+    try {
+      _bannerAd = await AdService.createBannerAd(
+        onAdLoaded: (Ad ad) {
+          setState(() {
+            _isAdLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          ad.dispose();
+          print('Banner ad failed to load: $error');
+        },
+      );
 
-    _bannerAd?.load();
+      _bannerAd?.load();
+    } catch (e) {
+      print('Failed to create banner ad: $e');
+    }
   }
 
   @override
