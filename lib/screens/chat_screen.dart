@@ -118,12 +118,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.more_vert, color: Colors.black),
-          onPressed: () {},
-        ),
-      ],
+      actions: [],
     );
   }
 
@@ -150,7 +145,7 @@ class _ChatScreenState extends State<ChatScreen> {
               Icon(Icons.info_outline, size: 14, color: Colors.grey[700]),
               const SizedBox(width: 8),
               Text(
-                'Tip: Double press on messages to delete them',
+                'Tip: Double tab on messages to delete them',
                 style: TextStyle(
                   color: Colors.grey[700],
                   fontSize: 12,
