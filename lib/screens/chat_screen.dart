@@ -1,5 +1,3 @@
-import 'package:animetalk/constants/types.dart';
-import 'package:animetalk/data/database/database.dart';
 import 'package:animetalk/viewmodels/chat_viewmodel.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -187,26 +185,28 @@ class _ChatScreenState extends State<ChatScreen> {
 
               return ListView.builder(
                 controller: _scrollController,
-                reverse: true, // Display newest messages at the bottom
+                reverse: true,
                 padding: const EdgeInsets.all(16),
                 itemCount: viewModel.isCharacterTyping
                     ? messages.length + 1
                     : messages.length,
                 itemBuilder: (context, index) {
-                  // For a reversed ListView, we need to reverse the index
-                  // If typing indicator is showing, account for it in the index calculation
+                  // For typing indicator, use a fixed height container to prevent layout shifts
                   if (viewModel.isCharacterTyping && index == 0) {
-                    return TypingIndicator(
-                      characterImage: widget.characterImage,
+                    return Container(
+                      height: 50, // Fixed height to prevent layout shifts
+                      child: TypingIndicator(
+                        characterImage: widget.characterImage,
+                      ),
                     );
                   }
 
-                  // Get the correct message index (reversed)
-                  final messageIndex = viewModel.isCharacterTyping
-                      ? messages.length - index
-                      : messages.length - index - 1;
+                  // Simplify the index calculation to be more stable
+                  final messageIndex = messages.length -
+                      1 -
+                      index +
+                      (viewModel.isCharacterTyping ? 1 : 0);
 
-                  // Ensure we don't go out of bounds
                   if (messageIndex < 0 || messageIndex >= messages.length) {
                     return SizedBox.shrink();
                   }
