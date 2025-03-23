@@ -185,29 +185,33 @@ class _ChatScreenState extends State<ChatScreen> {
                 return const Center(child: Text('No messages yet'));
               }
 
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (_scrollController.hasClients) {
-                  _scrollController.animateTo(
-                    _scrollController.position.maxScrollExtent + 300,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeOut,
-                  );
-                }
-              });
-
               return ListView.builder(
                 controller: _scrollController,
+                reverse: true, // Display newest messages at the bottom
                 padding: const EdgeInsets.all(16),
                 itemCount: viewModel.isCharacterTyping
                     ? messages.length + 1
                     : messages.length,
                 itemBuilder: (context, index) {
-                  if (viewModel.isCharacterTyping && index == messages.length) {
+                  // For a reversed ListView, we need to reverse the index
+                  // If typing indicator is showing, account for it in the index calculation
+                  if (viewModel.isCharacterTyping && index == 0) {
                     return TypingIndicator(
                       characterImage: widget.characterImage,
                     );
                   }
-                  final message = messages[index];
+
+                  // Get the correct message index (reversed)
+                  final messageIndex = viewModel.isCharacterTyping
+                      ? messages.length - index
+                      : messages.length - index - 1;
+
+                  // Ensure we don't go out of bounds
+                  if (messageIndex < 0 || messageIndex >= messages.length) {
+                    return SizedBox.shrink();
+                  }
+
+                  final message = messages[messageIndex];
                   return ChatMessageBubble(
                     message: message,
                     characterImage: widget.characterImage,
@@ -326,6 +330,17 @@ class _ChatScreenState extends State<ChatScreen> {
                       FocusScope.of(context).unfocus();
                       viewModel.sendMessage(_messageController.text);
                       _messageController.clear();
+
+                      // For a reversed ListView, we scroll to position 0 for newest messages
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (_scrollController.hasClients) {
+                          _scrollController.animateTo(
+                            0, // Scroll to top for reversed ListView
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeOut,
+                          );
+                        }
+                      });
                     }
                   },
                 ),
