@@ -63,6 +63,12 @@ After launching the application, you can:
 4. Customize your profile to showcase your favorite anime
 5. Connect with other users through the chat feature
 
+## Sample
+
+[![Home Screen](assets/images/characters.jpeg)]
+
+[![Chat Scrren](assets/images/chats.jpeg)]
+
 ## Contributing
 
 We welcome contributions to AnimeTalk! Please follow these steps:
@@ -72,8 +78,6 @@ We welcome contributions to AnimeTalk! Please follow these steps:
 3. Commit your changes (`git commit -m 'Add some feature'`)
 4. Push to the branch (`git push origin feature/your-feature`)
 5. Open a Pull Request
-
-
 
 ---
 
