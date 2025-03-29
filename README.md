@@ -14,9 +14,10 @@ AnimeTalk is a Flutter-based mobile application designed for anime enthusiasts t
 ## Technologies Used
 
 - Flutter for cross-platform mobile application development
-- Firebase for backend services and authentication
-- Cloud Firestore for database management
-- Firebase Cloud Messaging for push notifications
+- Dynamodb for storage
+- AWS Lambda function for running backend application
+- S3 Bucker for stroing images
+
 
 ## Getting Started
 
