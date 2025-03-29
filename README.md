@@ -8,8 +8,6 @@ AnimeTalk is a Flutter-based mobile application designed for anime enthusiasts t
 - **Discussion Forums**: Dedicated spaces for different anime genres and series
 - **Real-time Chat**: Connect with other anime fans instantly
 - **Personalized Recommendations**: Discover new anime based on your preferences
-- **Profile Customization**: Create a unique profile representing your anime interests
-- **Notifications**: Stay updated with the latest discussions and mentions
 
 ## Technologies Used
 
